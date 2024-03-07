@@ -8,8 +8,8 @@ use crate::recipe_model::RecipeModel;
 #[derive(Serialize, Deserialize)]
 pub struct RecipeIndexEntry {
     #[serde(rename = "recipeUID")]
-    recipe_uid: String,
-    checksum: String
+    pub recipe_uid: String,
+    pub checksum: String
 }
 
 #[derive(Serialize, Deserialize)]
@@ -59,5 +59,9 @@ impl RecipesIndex {
             }
         }
         Ok ( results )
+    }
+
+    pub fn find_uid(&self, uid: &str) -> Option<&RecipeIndexEntry> {
+        self.recipes.iter().find(|recep| recep.recipe_uid==uid)
     }
 }
