@@ -64,4 +64,8 @@ impl RecipesIndex {
     pub fn find_uid(&self, uid: &str) -> Option<&RecipeIndexEntry> {
         self.recipes.iter().find(|recep| recep.recipe_uid==uid)
     }
+
+    pub fn count(&self) -> usize {
+        return self.recipes.len()
+    }
 }
