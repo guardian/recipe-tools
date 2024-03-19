@@ -3,6 +3,7 @@ use reqwest::{self, Client, StatusCode};
 use simple_error::bail;
 use std::error::Error;
 pub mod recipe_model;
+pub mod capi_client;
 use crate::recipe_model::RecipeModel;
 
 #[derive(Serialize, Deserialize)]

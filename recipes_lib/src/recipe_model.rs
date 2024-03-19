@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
     width: number;
     height: number; */
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct RecipeImage {
     pub url: String,
     #[serde(rename = "mediaId")]
@@ -53,7 +53,7 @@ pub struct RecipeImage {
     instructions: Instruction[];
     bookCredit: string; */
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct RecipeModel {
     pub id: String,
     #[serde(rename = "composerId")]

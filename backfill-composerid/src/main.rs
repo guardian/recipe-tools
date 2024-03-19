@@ -1,6 +1,6 @@
 use clap::Parser;
-use recipes_lib::recipe_model::RecipeModel;
-use std::error::Error;
+use recipes_lib::{capi_client::capi_single_article, recipe_model::RecipeModel};
+use std::{borrow::BorrowMut, error::Error};
 
 #[derive(Parser, Debug)]
 struct Args {
@@ -8,7 +8,10 @@ struct Args {
     host: String,
 
     #[arg(short, long)]
-    modify: bool
+    modify: bool,
+
+    #[arg(short, long)]
+    key: String,
 }
 
 
@@ -38,6 +41,31 @@ async fn main() -> Result< (), Box<dyn Error>>{
     }).collect();
 
     println!("INFO {} / {} recipes had no composer ID AND no CAPI ID therefore are not processable", recipes_no_composerid.len() - recipes_no_composerid_with_capi_id.len(), recipes_no_composerid.len() );
+
+    let http_client = reqwest::Client::new();
+    let fields = vec!["internalComposerCode"];
+
+    for recep in recipes_no_composerid_with_capi_id.into_iter() {
+        let canonical_article_id = recep.canonical_article.clone().unwrap();
+
+        let capi_article = capi_single_article(&http_client, &canonical_article_id, &args.key, Some(&fields)).await?;
+        let maybeComposerId = &capi_article.response.content
+                                            .map(|content| content.fields.map(|f| f.internal_composer_code).flatten())
+                                            .flatten();
+        match maybeComposerId {
+            Some(composer_id)=>{
+                println!("{} -> {}", canonical_article_id, composer_id);
+
+                let mut updated = (*recep).clone();
+                updated.composer_id = Some(composer_id.clone());
+                println!("{:?}", &updated);
+            },
+            None=>{
+                println!("ERROR Unable to get a Composer ID for {}!", canonical_article_id);
+                break;
+            }
+        }
+    }
 
     Ok( () )
 }
