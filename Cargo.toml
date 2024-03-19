@@ -2,5 +2,6 @@
 resolver = "2"
 members = [
     "find-empty-contributors",
+    "backfill-composerid",
     "recipes_lib"
 ]
