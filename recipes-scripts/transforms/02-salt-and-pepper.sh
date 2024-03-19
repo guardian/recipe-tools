@@ -1,6 +1,7 @@
 #! /bin/bash
 
-./transform-recipes.sh -d salt-and-pepper \
+./transform-recipes.sh \
+  -n salt-and-pepper \
   -f 'select(
       .ingredients[].ingredientsList[]
       | (.name | test("^salt"; "i"))
