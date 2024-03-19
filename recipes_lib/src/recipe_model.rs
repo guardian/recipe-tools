@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
     width: number;
     height: number; */
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct RecipeImage {
     pub url: String,
     #[serde(rename = "mediaId")]
@@ -29,6 +29,33 @@ pub struct RecipeImage {
     pub display_credit: Option<bool>,
     pub width: Option<u32>,
     pub height: Option<u32>
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Ingredient {
+  #[serde(rename = "ingredientsList")]
+  pub ingredients_list: Vec<IngredientData>,
+  #[serde(rename = "recipeSection")]
+  pub recipe_section: Option<String>
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct IngredientData {
+  pub name: String,
+  #[serde(rename = "ingredientId")]
+  pub ingredient_id: Option<String>,
+  pub amount: Option<Amount>,
+  pub unit: Option<String>,
+  pub prefix: Option<String>,
+  pub suffix: Option<String>,
+  pub text: Option<String>,
+  pub optional: Option<bool>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Amount {
+  pub min: Option<f32>,
+  pub max: Option<f32>
 }
 
 /*
@@ -53,7 +80,7 @@ pub struct RecipeImage {
     instructions: Instruction[];
     bookCredit: string; */
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct RecipeModel {
     pub id: String,
     #[serde(rename = "composerId")]
