@@ -72,7 +72,7 @@ do
     jq "$JQ_QUERY" "$FORMATTED_FILE" > "$OUTFILE"
 done
 
-DIFF_FILE_PATH="./$OUT_DIR/diff.txt"
+DIFF_FILE_PATH="$OUT_DIR/diff.txt"
 printf "Writing diff to $DIFF_FILE_PATH\n\n"
 
 for FILE in "$FORMATTED_DIR"/*
@@ -92,8 +92,10 @@ for FILE in "$MODIFIED_DIR"/*
 do
     jq -c "$JQ_OUTPUT" "$FILE" | \
       while read -r LINE; do \
+        FILE_NAME=$(basename "$FILE" .json)
+        printf "Writing data for %s: %s\n" "$FILE_NAME" "$LINE"
         curl \
-          --location "$INTEGRATION_ENDPOINT/recipes/import/update-recipe-element/$(basename $FILE .json)" \
+          --location "$INTEGRATION_ENDPOINT/recipes/import/update-recipe-element/$FILE_NAME" \
           --header 'Content-Type: application/json' \
           --data "$LINE" \
           ;
