@@ -15,7 +15,7 @@ pub async fn update_file(updated: &RecipeModel, idx:&RecipesIndex, write_updates
             let path = format!("content/{}", idx_entry.checksum);
 
             println!("INFO Writing to {}", path);
-            let marshalled = serde_json::to_string(idx_entry)?;
+            let marshalled = serde_json::to_string(updated)?;
 
             if write_updates {
                 let result = s3client.put_object()
