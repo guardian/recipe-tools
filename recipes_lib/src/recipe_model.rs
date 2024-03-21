@@ -1,3 +1,5 @@
+use std::collections::btree_map::Range;
+
 use serde::{Deserialize, Serialize};
 
 /*
@@ -31,31 +33,52 @@ pub struct RecipeImage {
     pub height: Option<u32>
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct RangeValue {
+    min: Option<f64>,
+    max: Option<f64>
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Ingredient {
-  #[serde(rename = "ingredientsList")]
-  pub ingredients_list: Vec<IngredientData>,
-  #[serde(rename = "recipeSection")]
-  pub recipe_section: Option<String>
+    pub name:String,
+    #[serde(rename = "ingredientId")]
+    pub ingredient_id: Option<String>,
+    pub amount: Option<RangeValue>,
+    pub unit: String,
+    pub prefix:Option<String>,
+    pub suffix:Option<String>,
+    pub text: Option<String>,
+    pub optional: Option<bool>
 }
 
-#[derive(Serialize, Deserialize)]
-pub struct IngredientData {
-  pub name: String,
-  #[serde(rename = "ingredientId")]
-  pub ingredient_id: Option<String>,
-  pub amount: Option<Amount>,
-  pub unit: Option<String>,
-  pub prefix: Option<String>,
-  pub suffix: Option<String>,
-  pub text: Option<String>,
-  pub optional: Option<bool>,
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct IngredientGroup {
+    #[serde(rename = "recipeSection")]
+    pub recipe_section:Option<String>,
+    #[serde(rename = "ingredientsList")]
+    pub ingredients_list:Vec<Ingredient>,
 }
 
-#[derive(Serialize, Deserialize)]
-pub struct Amount {
-  pub min: Option<f32>,
-  pub max: Option<f32>
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct Serves {
+    pub amount: RangeValue,
+    pub unit: Option<String>,
+    pub text: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct Timings {
+    pub qualifier: String,
+    #[serde(rename = "durationInMins")]
+    pub duration_in_mins:RangeValue,
+    pub text:Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct Instruction {
+    pub description: String,
+    pub images: Option<Vec<RecipeImage>>
 }
 
 /*
@@ -93,8 +116,29 @@ pub struct RecipeModel {
     pub is_app_ready: Option<bool>,
     #[serde(rename = "featuredImage")]
     pub featured_image: Option<RecipeImage>,
-    pub contributors: Vec<String>,
+    #[serde(rename = "previewImage")]
+    pub preview_image: Option<RecipeImage>,
+    pub contributors: Option<Vec<String>>,
+    pub ingredients: Vec<IngredientGroup>,
     pub byline: Option<Vec<String>>,
-    pub ingredients: Vec<Ingredient>
+    #[serde(rename = "suitableForDietIds")]
+    pub suitable_for_diet_ids: Option<Vec<String>>,
+    #[serde(rename = "cuisineIds")]
+    pub cuisine_ids: Option<Vec<String>>,
+    #[serde(rename = "mealTypeIds")]
+    pub meal_type_ids: Option<Vec<String>>,
+    #[serde(rename = "celebrationIds")]
+    pub celebration_ids: Option<Vec<String>>,
+    #[serde(rename = "utensilsAndApplianceIds")]
+    pub utensil_and_appliance_ids: Option<Vec<String>>,
+    #[serde(rename = "techniquesUsedIds")]
+    pub techniques_used_ids: Option<Vec<String>>,
+    #[serde(rename = "difficultyLevel")]
+    pub difficulty_level: Option<String>,
+    pub serves: Vec<Serves>,
+    pub timings: Vec<Timings>,
+    pub instructions: Vec<Instruction>,
+    #[serde(rename = "bookCredit")]
+    pub book_credit: Option<String>,
 }
 

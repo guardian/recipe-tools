@@ -47,7 +47,8 @@ async fn main() -> Result<(), Box<dyn Error>>{
     dump_list(&not_app_ready, &idx);
 
     let problematic:Vec<&RecipeModel> = recipes.iter().filter(|recep| {
-        recep.contributors.len()==0 && recep.byline.clone().unwrap_or(vec![]).len()==0
+        recep.contributors.clone().unwrap_or(vec![]).len()==0 && 
+            recep.byline.clone().unwrap_or(vec![]).len()==0
     }).collect();
 
     println!("INFO: Got {} recipes which had no contributors or byline", problematic.len());
