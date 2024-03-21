@@ -1,5 +1,3 @@
-use std::collections::btree_map::Range;
-
 use serde::{Deserialize, Serialize};
 
 /*
@@ -47,6 +45,9 @@ pub struct RecipeImage {
     pub aspect_ratio: Option<String>
 }
 
+//Why is this here? Well, Node.js serializes 1.0 -> 1 and 1.5 -> 1.5.  However, serde_json serializes 1.0 -> 1.0 and 1.5 -> 1.5.
+//In order to avoid introducing a load of changes to the JSON, we allow serde to first attempt to deserialize to an integer and if that
+//does not work then go to float.
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(untagged)]
 enum Number {
@@ -59,37 +60,6 @@ pub struct RangeValue {
     min: Option<Number>,
     max: Option<Number>
 }
-
-// impl Serialize for RangeValue {
-//     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-//         where
-//             S: serde::Serializer {
-        
-
-//         match &self.min {
-//             Some(floatVal)=>{
-//                 if floatVal.fract() == 0.0 {  //can serialize as int
-//                     &serializer.serialize_i64(*floatVal as i64);
-//                 } else {
-//                     &serializer.serialize_f64(*floatVal);
-//                 }
-//             },
-//             None=>{}
-//         }
-
-//         match &self.max {
-//             Some(floatVal)=>{
-//                 if floatVal.fract() == 0.0 {  //can serialize as int
-//                     serializer.serialize_i64(*floatVal as i64)
-//                 } else {
-//                     serializer.serialize_f64(*floatVal)
-//                 }
-//             },
-//             None=>serializer.serialize_none()
-//         }
-
-//     }
-// }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Ingredient {

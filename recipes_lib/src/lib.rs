@@ -46,9 +46,6 @@ impl RecipesIndex {
         Ok( unmarshalled )
     }
 
-    // fn significant_terms(from:&Map<String, Value>) -> Value {
-    //    from.
-    // }
     fn json_diff(&self, incoming:&str, remarshalled:&str, labelled: &str) -> Result<bool, Box<dyn Error>> {
         let incoming_src: Value = serde_json::from_str(incoming)?;
         let remarshalled_src: Value = serde_json::from_str(remarshalled)?;
@@ -87,13 +84,6 @@ impl RecipesIndex {
                                     let remarshalled = serde_json::to_string(&unmarshalled)?;
                                     let label = format!("{} / {}", recep.recipe_uid, recep.checksum);
                                     self.json_diff(&content, &remarshalled, &label)?
-                                    // let remarshalled = serde_json::to_string(&unmarshalled)?;
-                                    // if remarshalled != content {
-                                    //     println!("WARNING {} / {}: failed marshalling check", recep.recipe_uid, recep.checksum);
-                                    //     println!("Original: {}", content);
-                                    //     println!("Remarshalled: {}", remarshalled);
-                                    //     return Err("Roundtrip test failed".into());
-                                    // }
                                 },
                                 false=>false,
                             };

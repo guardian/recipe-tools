@@ -30,7 +30,7 @@ pub async fn main() -> Result<(), Box<dyn Error>> {
     for r in receps {
         let serialized = serde_json::to_string(&r)?;
         file.write_all(serialized.as_bytes())?;
-        file.write(newline.as_bytes());
+        file.write(newline.as_bytes())?;
     }
     Ok( () )
 }
