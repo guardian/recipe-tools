@@ -1,6 +1,7 @@
 use clap::Parser;
 use recipes_lib::{capi_client::capi_single_article, recipe_model::RecipeModel};
 use std::{borrow::BorrowMut, error::Error};
+mod update;
 
 #[derive(Parser, Debug)]
 struct Args {
@@ -12,6 +13,12 @@ struct Args {
 
     #[arg(short, long)]
     key: String,
+
+    #[arg(short,long)]
+    capi_base: String,
+
+    #[arg(short,long)]
+    write_updates: bool
 }
 
 
@@ -48,7 +55,7 @@ async fn main() -> Result< (), Box<dyn Error>>{
     for recep in recipes_no_composerid_with_capi_id.into_iter() {
         let canonical_article_id = recep.canonical_article.clone().unwrap();
 
-        let capi_article = capi_single_article(&http_client, &canonical_article_id, &args.key, Some(&fields)).await?;
+        let capi_article = capi_single_article(&http_client, &args.capi_base,&canonical_article_id, &args.key, Some(&fields)).await?;
         let maybeComposerId = &capi_article.response.content
                                             .map(|content| content.fields.map(|f| f.internal_composer_code).flatten())
                                             .flatten();
@@ -59,6 +66,9 @@ async fn main() -> Result< (), Box<dyn Error>>{
                 let mut updated = (*recep).clone();
                 updated.composer_id = Some(composer_id.clone());
                 println!("{:?}", &updated);
+
+                update::update_file(&updated, &idx, args.write_updates).await?;
+
             },
             None=>{
                 println!("ERROR Unable to get a Composer ID for {}!", canonical_article_id);

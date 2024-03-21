@@ -61,7 +61,7 @@ pub struct RecipeModel {
     #[serde(rename = "canonicalArticle")]
     pub canonical_article: Option<String>,
     pub title: String,
-    pub description: String,
+    pub description: Option<String>,
     #[serde(rename = "isAppReady")]
     pub is_app_ready: Option<bool>,
     #[serde(rename = "featuredImage")]

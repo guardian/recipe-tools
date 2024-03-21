@@ -30,9 +30,9 @@ pub struct CapiArticle {
     #[serde(rename = "isHosted")]
     pub is_hosted: bool,
     #[serde(rename = "pillarId")]
-    pub pillar_id: String,
+    pub pillar_id: Option<String>,
     #[serde(rename = "pillarName")]
-    pub pillar_name: String,
+    pub pillar_name: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -49,7 +49,7 @@ pub struct CapiArticleEnvelope {
     pub response:CapiArticleResponse,
 }
 
-pub async fn capi_single_article(http_client: &Client, canonical_article_id: &str, api_key:&str, show_fields:Option<&Vec<&str>>) -> Result<CapiArticleEnvelope, Box<dyn Error>> {
+pub async fn capi_single_article(http_client: &Client, base_url:&str, canonical_article_id: &str, api_key:&str, show_fields:Option<&Vec<&str>>) -> Result<CapiArticleEnvelope, Box<dyn Error>> {
     let params:Vec<String> = vec!(
         ("api-key", Some(api_key)),
         ("show-fields", show_fields.map(|fields| fields.join(",")).as_deref()),
@@ -58,7 +58,7 @@ pub async fn capi_single_article(http_client: &Client, canonical_article_id: &st
         .map(|kv| format!("{}={}", kv.0, kv.1.unwrap()))
         .collect();
 
-    let url = format!("https://content.guardianapis.com/{}?{}", canonical_article_id, params.join("&"));
+    let url = format!("{}/{}?{}", base_url, canonical_article_id, params.join("&"));
 
     println!("DEBUG CAPI URL is {}", url);
 

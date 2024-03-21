@@ -35,6 +35,11 @@ pub async fn get_recipes_index(hostname: &str) -> Result<RecipesIndex, Box<dyn E
 }
 
 impl RecipesIndex {
+    fn internal_unmarshal(content:&str) -> Result<RecipeModel, Box<dyn Error>> {
+        let unmarshalled:RecipeModel = serde_json::from_str(content)?;
+        Ok( unmarshalled )
+    }
+
     pub async fn all_recipes_content(&self, hostname: &str) -> Result<Vec<RecipeModel>, Box<dyn Error>> {
         let mut results:Vec<RecipeModel> = vec![];
 
@@ -48,8 +53,10 @@ impl RecipesIndex {
             match response.status() {
                 StatusCode::OK=>{
                     let content = response.text().await?;
-                    let unmarshalled:RecipeModel = serde_json::from_str(&content)?;
-                    results.push(unmarshalled);
+                    match RecipesIndex::internal_unmarshal(&content) {
+                        Ok(unmarshalled)=>results.push(unmarshalled),
+                        Err(err)=>println!("ERROR Could not unmarshal data for recipe {} / {}: {}", recep.recipe_uid, recep.checksum, err),
+                    }
                 },
                 StatusCode::NOT_FOUND=>{
                     println!("WARNING Recipe with uid {} and checksum {} was not found", recep.recipe_uid, recep.checksum);

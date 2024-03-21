@@ -11,3 +11,6 @@ reqwest = "0.11.24"
 reqwest_mock = "0.7.0"
 tokio = { version = "1.36.0", features = ["full"] }
 recipes_lib = { path = "../recipes_lib" }
+aws-config = { version = "1.1.7", features = ["behavior-version-latest"] }
+aws-sdk-s3 = "1.20.0"
+serde_json = "1.0.114"
