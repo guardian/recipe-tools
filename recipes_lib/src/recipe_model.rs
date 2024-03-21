@@ -15,7 +15,7 @@ use serde::{Deserialize, Serialize};
     width: number;
     height: number; */
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct RecipeImage {
     pub url: String,
     #[serde(rename = "mediaId")]

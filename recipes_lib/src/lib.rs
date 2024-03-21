@@ -23,6 +23,11 @@ pub struct RecipesIndex {
     pub last_updated: String,
 }
 
+impl RecipesIndex {
+    pub fn count(&self) -> usize {
+        self.recipes.len()
+    }
+}
 pub async fn get_recipes_index(hostname: &str) -> Result<RecipesIndex, Box<dyn Error>>{
     let url = format!("https://{}/index.json", hostname);
 
