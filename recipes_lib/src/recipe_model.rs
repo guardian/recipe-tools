@@ -40,7 +40,11 @@ pub struct RecipeImage {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub width: Option<u32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub height: Option<u32>
+    pub height: Option<u32>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]   //deprecated field from Hatch
+    #[serde(rename = "aspectRatio")]
+    pub aspect_ratio: Option<String>
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -138,7 +142,10 @@ pub struct Timings {
 pub struct Instruction {
     pub description: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub images: Option<Vec<RecipeImage>>
+    pub images: Option<Vec<RecipeImage>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "stepNumber")]
+    pub step_number:Option<i32>
 }
 
 /*
@@ -175,6 +182,7 @@ pub struct RecipeModel {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     #[serde(rename = "isAppReady")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub is_app_ready: Option<bool>,
     #[serde(rename = "featuredImage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -199,6 +207,11 @@ pub struct RecipeModel {
     #[serde(rename = "celebrationIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub celebration_ids: Option<Vec<String>>,
+
+    #[serde(rename = "celebrationsIds")]    //This is a misnamed version that has been seen in some data
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub celebrations_ids: Option<Vec<String>>,  
+
     #[serde(rename = "utensilsAndApplianceIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub utensil_and_appliance_ids: Option<Vec<String>>,
