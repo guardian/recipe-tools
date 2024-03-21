@@ -31,7 +31,7 @@ async fn main() -> Result< (), Box<dyn Error>>{
     println!("INFO Index has {} recipes", idx.count());
 
     println!("INFO: Downloading recipes...");
-    let recipes = idx.all_recipes_content(&args.host).await?;
+    let recipes = idx.all_recipes_content(&args.host, None).await?;
 
     println!("INFO: Got a total of {} recipes", (recipes.len()));
 

@@ -3,5 +3,6 @@ resolver = "2"
 members = [
     "find-empty-contributors",
     "backfill-composerid",
+    "download-ndjson",
     "recipes_lib"
 ]

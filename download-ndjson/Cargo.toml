@@ -1,5 +1,5 @@
 [package]
-name = "backfill-composerid"
+name = "download-ndjson"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,10 +7,9 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.5.2", features = ["derive"] }
-reqwest = "0.12.0"
-reqwest_mock = "0.7.0"
+# reqwest = "0.12.0"
+# reqwest_mock = "0.7.0"
 tokio = { version = "1.36.0", features = ["full"] }
 recipes_lib = { path = "../recipes_lib" }
-aws-config = { version = "1.1.7", features = ["behavior-version-latest"] }
-aws-sdk-s3 = "1.20.0"
+# aws-config = { version = "1.1.7", features = ["behavior-version-latest"] }
 serde_json = "1.0.114"
