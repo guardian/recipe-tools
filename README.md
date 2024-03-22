@@ -27,4 +27,8 @@ Common library that holds the data models and shared code for interfacing the ba
 
 ### recipes-scripts
 
-Some useful scripts. Currently holds `./transform-recipes.sh`, 
+Some useful scripts. Currently holds:
+- `./transform-recipes.sh`, which applies JQ formatted filter/translation operations to existing recipes
+before pushing them back to Composer 
+- `./lookup-composer.sh`, which allows you to find the Composer ID given a recipe checksum (mutable ID) as provided by the Feast app
+
