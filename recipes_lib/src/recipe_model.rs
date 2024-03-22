@@ -31,6 +31,33 @@ pub struct RecipeImage {
     pub height: Option<u32>
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct Ingredient {
+  #[serde(rename = "ingredientsList")]
+  pub ingredients_list: Vec<IngredientData>,
+  #[serde(rename = "recipeSection")]
+  pub recipe_section: Option<String>
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct IngredientData {
+  pub name: String,
+  #[serde(rename = "ingredientId")]
+  pub ingredient_id: Option<String>,
+  pub amount: Option<Amount>,
+  pub unit: Option<String>,
+  pub prefix: Option<String>,
+  pub suffix: Option<String>,
+  pub text: Option<String>,
+  pub optional: Option<bool>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Amount {
+  pub min: Option<f32>,
+  pub max: Option<f32>
+}
+
 /*
     id: string;
     composerId: string;
@@ -68,5 +95,6 @@ pub struct RecipeModel {
     pub featured_image: Option<RecipeImage>,
     pub contributors: Vec<String>,
     pub byline: Option<Vec<String>>,
+    pub ingredients: Vec<Ingredient>
 }
 

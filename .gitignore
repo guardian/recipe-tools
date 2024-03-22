@@ -1,2 +1,4 @@
 target/
 problematic/
+recipes-scripts/out/**/*
+recipes-scripts/recipes.ndjson

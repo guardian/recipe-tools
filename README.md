@@ -24,3 +24,7 @@ CAPI path, uid and checksum (if present).
 ### recipes-lib
 
 Common library that holds the data models and shared code for interfacing the backend
+
+### recipes-scripts
+
+Some useful scripts. Currently holds `./transform-recipes.sh`, 
