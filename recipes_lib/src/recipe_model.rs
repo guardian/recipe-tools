@@ -13,49 +13,109 @@ use serde::{Deserialize, Serialize};
     width: number;
     height: number; */
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct RecipeImage {
     pub url: String,
     #[serde(rename = "mediaId")]
     pub media_id: String,
     #[serde(rename = "cropId")]
     pub crop_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub photographer: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "imageType")]
     pub image_type: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub caption: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "mediaApiUri")]
+    pub media_api_url: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "displayCredit")]
     pub display_credit: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub width: Option<u32>,
-    pub height: Option<u32>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub height: Option<u32>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]   //deprecated field from Hatch
+    #[serde(rename = "aspectRatio")]
+    pub aspect_ratio: Option<String>
 }
 
-#[derive(Serialize, Deserialize)]
+//Why is this here? Well, Node.js serializes 1.0 -> 1 and 1.5 -> 1.5.  However, serde_json serializes 1.0 -> 1.0 and 1.5 -> 1.5.
+//In order to avoid introducing a load of changes to the JSON, we allow serde to first attempt to deserialize to an integer and if that
+//does not work then go to float.
+#[derive(Serialize, Deserialize, Clone, Debug)]
+#[serde(untagged)]
+enum Number {
+    Integer(i64),
+    Float(f64)
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct RangeValue {
+    min: Option<Number>,
+    max: Option<Number>
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Ingredient {
-  #[serde(rename = "ingredientsList")]
-  pub ingredients_list: Vec<IngredientData>,
-  #[serde(rename = "recipeSection")]
-  pub recipe_section: Option<String>
+    pub name:String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "ingredientId")]
+    pub ingredient_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amount: Option<RangeValue>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unit: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prefix:Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suffix:Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub optional: Option<bool>
 }
 
-#[derive(Serialize, Deserialize)]
-pub struct IngredientData {
-  pub name: String,
-  #[serde(rename = "ingredientId")]
-  pub ingredient_id: Option<String>,
-  pub amount: Option<Amount>,
-  pub unit: Option<String>,
-  pub prefix: Option<String>,
-  pub suffix: Option<String>,
-  pub text: Option<String>,
-  pub optional: Option<bool>,
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct IngredientGroup {
+    #[serde(rename = "recipeSection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recipe_section:Option<String>,
+    #[serde(rename = "ingredientsList")]
+    pub ingredients_list:Vec<Ingredient>,
 }
 
-#[derive(Serialize, Deserialize)]
-pub struct Amount {
-  pub min: Option<f32>,
-  pub max: Option<f32>
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct Serves {
+    pub amount: RangeValue,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unit: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct Timings {
+    pub qualifier: String,
+    #[serde(rename = "durationInMins")]
+    pub duration_in_mins:RangeValue,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text:Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct Instruction {
+    pub description: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub images: Option<Vec<RecipeImage>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "stepNumber")]
+    pub step_number:Option<i32>
 }
 
 /*
@@ -84,17 +144,58 @@ pub struct Amount {
 pub struct RecipeModel {
     pub id: String,
     #[serde(rename = "composerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub composer_id: Option<String>,
     #[serde(rename = "canonicalArticle")]
     pub canonical_article: Option<String>,
     pub title: String,
-    pub description: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
     #[serde(rename = "isAppReady")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub is_app_ready: Option<bool>,
     #[serde(rename = "featuredImage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub featured_image: Option<RecipeImage>,
-    pub contributors: Vec<String>,
+    #[serde(rename = "previewImage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preview_image: Option<RecipeImage>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contributors: Option<Vec<String>>,
+    pub ingredients: Vec<IngredientGroup>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub byline: Option<Vec<String>>,
-    pub ingredients: Vec<Ingredient>
+    #[serde(rename = "suitableForDietIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suitable_for_diet_ids: Option<Vec<String>>,
+    #[serde(rename = "cuisineIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cuisine_ids: Option<Vec<String>>,
+    #[serde(rename = "mealTypeIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub meal_type_ids: Option<Vec<String>>,
+    #[serde(rename = "celebrationIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub celebration_ids: Option<Vec<String>>,
+
+    #[serde(rename = "celebrationsIds")]    //This is a misnamed version that has been seen in some data
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub celebrations_ids: Option<Vec<String>>,  
+
+    #[serde(rename = "utensilsAndApplianceIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub utensil_and_appliance_ids: Option<Vec<String>>,
+    #[serde(rename = "techniquesUsedIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub techniques_used_ids: Option<Vec<String>>,
+    #[serde(rename = "difficultyLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub difficulty_level: Option<String>,
+    pub serves: Vec<Serves>,
+    pub timings: Vec<Timings>,
+    pub instructions: Vec<Instruction>,
+    #[serde(rename = "bookCredit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub book_credit: Option<String>,
 }
 
