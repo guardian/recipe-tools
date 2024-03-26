@@ -23,14 +23,20 @@ pub async fn main() -> Result<(), Box<dyn Error>> {
 
     println!("Downloading index from {}...", &args.host);
     let idx = recipes_lib::get_recipes_index(&args.host).await?;
-    println!("Downloading {} recipes...", idx.count());
+    let total_recipes = idx.count();
+    println!("Downloading {} recipes...", total_recipes);
     let receps = idx.all_recipes_content(&args.host, args.roundtrip).await?;
 
     let newline = "\n";
+    let parsed_recipes = receps.len();
+
     for r in receps {
         let serialized = serde_json::to_string(&r)?;
         file.write_all(serialized.as_bytes())?;
         file.write(newline.as_bytes())?;
     }
+
+    println!("Successfully written {} of {} recipes. {} could not be written.", parsed_recipes, total_recipes, total_recipes - parsed_recipes);
+
     Ok( () )
 }
