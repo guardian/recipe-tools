@@ -258,7 +258,7 @@ dependencies = [
  "clap",
  "recipes_lib",
  "serde_json",
- "tokio 1.36.0",
+ "tokio 1.37.0",
 ]
 
 [[package]]
@@ -310,7 +310,7 @@ dependencies = [
  "recipes_lib",
  "reqwest 0.12.0",
  "reqwest_mock",
- "tokio 1.36.0",
+ "tokio 1.37.0",
 ]
 
 [[package]]
@@ -468,7 +468,7 @@ dependencies = [
  "http 1.1.0",
  "indexmap 2.2.5",
  "slab",
- "tokio 1.36.0",
+ "tokio 1.37.0",
  "tokio-util 0.7.10",
  "tracing",
 ]
@@ -604,7 +604,7 @@ dependencies = [
  "itoa 1.0.10",
  "pin-project-lite 0.2.13",
  "smallvec",
- "tokio 1.36.0",
+ "tokio 1.37.0",
  "want",
 ]
 
@@ -632,7 +632,7 @@ dependencies = [
  "hyper 1.2.0",
  "hyper-util",
  "native-tls",
- "tokio 1.36.0",
+ "tokio 1.37.0",
  "tokio-native-tls",
  "tower-service",
 ]
@@ -651,7 +651,7 @@ dependencies = [
  "hyper 1.2.0",
  "pin-project-lite 0.2.13",
  "socket2 0.5.6",
- "tokio 1.36.0",
+ "tokio 1.37.0",
  "tower",
  "tower-service",
  "tracing",
@@ -1085,7 +1085,7 @@ dependencies = [
  "serde",
  "serde_json",
  "simple-error",
- "tokio 1.36.0",
+ "tokio 1.37.0",
 ]
 
 [[package]]
@@ -1194,7 +1194,7 @@ dependencies = [
  "serde_urlencoded",
  "sync_wrapper",
  "system-configuration",
- "tokio 1.36.0",
+ "tokio 1.37.0",
  "tokio-native-tls",
  "tower-service",
  "url",
@@ -1485,9 +1485,9 @@ dependencies = [
 
 [[package]]
 name = "tokio"
-version = "1.36.0"
+version = "1.37.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "61285f6515fa018fb2d1e46eb21223fff441ee8db5d0f1435e8ab4f5cdb80931"
+checksum = "1adbebffeca75fcfd058afa480fb6c0b81e165a0323f9c9d39c9697e37c46787"
 dependencies = [
  "backtrace",
  "bytes 1.5.0",
@@ -1520,7 +1520,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bbae76ab933c85776efabc971569dd6119c580d8f5d448769dec1764bf796ef2"
 dependencies = [
  "native-tls",
- "tokio 1.36.0",
+ "tokio 1.37.0",
 ]
 
 [[package]]
@@ -1557,7 +1557,7 @@ dependencies = [
  "futures-core",
  "futures-sink",
  "pin-project-lite 0.2.13",
- "tokio 1.36.0",
+ "tokio 1.37.0",
  "tracing",
 ]
 
@@ -1571,7 +1571,7 @@ dependencies = [
  "futures-util",
  "pin-project",
  "pin-project-lite 0.2.13",
- "tokio 1.36.0",
+ "tokio 1.37.0",
  "tower-layer",
  "tower-service",
  "tracing",
