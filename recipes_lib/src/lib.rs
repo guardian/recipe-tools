@@ -5,7 +5,7 @@ use simple_error::bail;
 use std::error::Error;
 pub mod recipe_model;
 use crate::recipe_model::RecipeModel;
-use serde_json::{Value, Map};
+use serde_json::Value;
 
 #[derive(Serialize, Deserialize)]
 pub struct RecipeIndexEntry {
